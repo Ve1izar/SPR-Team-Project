@@ -46,7 +46,7 @@ Team3_Project/
 ### 1. Клонування репозиторію
 
 ```bash
-git clone <URL_ВАШОГО_РЕПОЗИТОРІЮ>
+git clone https://github.com/Ve1izar/SPR-Team-Project
 cd Team3_Project
 ```
 
