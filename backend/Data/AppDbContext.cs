@@ -1,3 +1,4 @@
+using LocalDriveApi.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LocalDriveApi.Data
@@ -11,5 +12,8 @@ namespace LocalDriveApi.Data
         // Додати сюди таблиці типу користувачів, і тд
         // public DbSet<User> Users { get; set; }
         // public DbSet<FileItem> FileItems { get; set; }
+
+        public DbSet<User> Users { get; set; }
+        public DbSet<FileItem> FileItems { get; set; }
     }
 }
