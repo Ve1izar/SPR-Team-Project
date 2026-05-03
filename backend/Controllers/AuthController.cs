@@ -36,7 +36,7 @@ namespace LocalDriveApi.Controllers
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 PhoneNumber = dto.PhoneNumber,
-                PasswordHash = dto.Password
+                Password = dto.Password
             };
 
             _context.Users.Add(user);
@@ -54,7 +54,7 @@ namespace LocalDriveApi.Controllers
             var user = await _context.Users
                 .FirstOrDefaultAsync(x => x.Email == dto.Email);
 
-            if (user == null || user.PasswordHash != dto.Password)
+            if (user == null || user.Password != dto.Password)
                 return Unauthorized("Invalid credentials");
 
             var token = _jwtService.GetAccessToken(user);
