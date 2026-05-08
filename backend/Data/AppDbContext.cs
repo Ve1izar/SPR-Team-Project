@@ -15,5 +15,6 @@ namespace LocalDriveApi.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<FileItem> FileItems { get; set; }
+        public DbSet<FileRecord> Files { get; set; }
     }
 }
