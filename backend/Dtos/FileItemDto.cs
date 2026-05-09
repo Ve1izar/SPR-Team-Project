@@ -1,4 +1,4 @@
-namespace LocalDriveApi.Models
+namespace LocalDriveApi.Dtos
 {
     public class FileItemDto
     {
