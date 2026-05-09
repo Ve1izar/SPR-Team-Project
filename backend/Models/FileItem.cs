@@ -7,5 +7,6 @@
         public string Type { get; set; } = string.Empty;
         public int? ParentId { get; set; }
         public string PhysicalPath { get; set; } = string.Empty;
+
     }
 }

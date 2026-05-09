@@ -1,0 +1,109 @@
+.dashboard {
+    padding: 24px;
+    background: #ffffff;
+    min-height: 100vh;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.view-controls {
+    display: flex;
+    gap: 8px;
+    background: #f1f5f9;
+    padding: 4px;
+    border-radius: 8px;
+}
+
+    .view-controls button {
+        border: none;
+        background: none;
+        padding: 6px;
+        cursor: pointer;
+        border-radius: 6px;
+        color: #64748b;
+    }
+
+        .view-controls button.active {
+            background: #ffffff;
+            color: #2563eb;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+.file-container.grid .items-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+}
+
+.file-container.grid .file-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    text-align: center;
+    position: relative;
+}
+
+.file-container.grid .file-icon {
+    margin-bottom: 12px;
+}
+
+.file-container.grid .icon-folder {
+    color: #fbbf24;
+    fill: #fbbf24;
+    fill-opacity: 0.1;
+}
+
+.file-container.grid .icon-file {
+    color: #3b82f6;
+}
+
+.file-container.list .list-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 40px;
+    padding: 12px;
+    font-weight: 600;
+    color: #64748b;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.file-container.list .file-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 40px;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.file-container.list .file-info {
+    display: contents;
+}
+
+.file-container.list .file-icon {
+    display: inline-flex;
+    margin-right: 12px;
+    vertical-align: middle;
+}
+
+.file-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1e293b;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.file-more {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+}
