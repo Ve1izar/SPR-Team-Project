@@ -1,13 +1,20 @@
 using LocalDriveApi.Data;
 using LocalDriveApi.Services;
+using LocalDriveApi.Services.Interfaces;
 using LocalDriveApi.Settings;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using System.Text;
 
 
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddScoped<IFolderService,FolderService>();
 
 // SQLite
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -45,7 +52,9 @@ builder.Services.AddScoped<JwtService>();
 // Когтролери і Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
+
 
 //CORS
 builder.Services.AddCors(options =>
@@ -65,6 +74,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowAll");
 app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
