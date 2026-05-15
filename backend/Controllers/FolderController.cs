@@ -30,7 +30,7 @@ namespace LocalDriveApi.Controllers
 
             var userId = int.Parse(claim.Value);
 
-            var folder = await _folderService.CreateAsync(dto, userId);
+            var folder = await _folderService.CreateAsync(dto.Name, dto.ParentId, userId);
 
             return Ok(new FolderDto
             {
