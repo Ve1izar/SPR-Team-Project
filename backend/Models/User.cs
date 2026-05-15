@@ -9,6 +9,7 @@
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? PhoneNumber { get; set; }
-        public ICollection<Folder> Folders { get; set; } = [];
+        
+        public ICollection<FileItem> FileItems { get; set; } = [];
     }
 }

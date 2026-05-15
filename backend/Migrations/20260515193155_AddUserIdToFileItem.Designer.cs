@@ -3,6 +3,7 @@ using System;
 using LocalDriveApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LocalDriveApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260515193155_AddUserIdToFileItem")]
+    partial class AddUserIdToFileItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.7");
@@ -22,12 +25,6 @@ namespace LocalDriveApi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("ContentType")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -40,12 +37,55 @@ namespace LocalDriveApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("Size")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FileItems");
+                });
+
+            modelBuilder.Entity("LocalDriveApi.Models.FileRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Files");
+                });
+
+            modelBuilder.Entity("LocalDriveApi.Models.Folder", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
@@ -56,7 +96,7 @@ namespace LocalDriveApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("FileItems");
+                    b.ToTable("Folders");
                 });
 
             modelBuilder.Entity("LocalDriveApi.Models.User", b =>
@@ -91,15 +131,15 @@ namespace LocalDriveApi.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("LocalDriveApi.Models.FileItem", b =>
+            modelBuilder.Entity("LocalDriveApi.Models.Folder", b =>
                 {
-                    b.HasOne("LocalDriveApi.Models.FileItem", "Parent")
+                    b.HasOne("LocalDriveApi.Models.Folder", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("LocalDriveApi.Models.User", "User")
-                        .WithMany("FileItems")
+                        .WithMany("Folders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -109,14 +149,14 @@ namespace LocalDriveApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("LocalDriveApi.Models.FileItem", b =>
+            modelBuilder.Entity("LocalDriveApi.Models.Folder", b =>
                 {
                     b.Navigation("Children");
                 });
 
             modelBuilder.Entity("LocalDriveApi.Models.User", b =>
                 {
-                    b.Navigation("FileItems");
+                    b.Navigation("Folders");
                 });
 #pragma warning restore 612, 618
         }

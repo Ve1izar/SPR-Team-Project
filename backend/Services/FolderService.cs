@@ -1,5 +1,4 @@
 ﻿using LocalDriveApi.Data;
-using LocalDriveApi.Dtos;
 using LocalDriveApi.Models;
 using LocalDriveApi.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -15,44 +14,35 @@ namespace LocalDriveApi.Services
             _context = context;
         }
 
-        public async Task<Folder> CreateAsync(CreateFolderDto dto, int userId)
+        public async Task<FileItem> CreateAsync(string name, int? parentId, int userId)
         {
-            if (string.IsNullOrWhiteSpace(dto.Name))
-                throw new Exception("Назва папка є обов'язковою");
-
-            int? parentId = dto.ParentId;
-
-            if (parentId.HasValue)
+            var folder = new FileItem
             {
-                var parentExists = await _context.Folders
-                    .AnyAsync(f =>
-                        f.Id == parentId.Value &&
-                        f.UserId == userId);
-
-                if (!parentExists)
-                    throw new Exception("Батьківська папка не знайдена");
-            }
-
-            var folder = new Folder
-            {
-                Name = dto.Name,
+                Name = name,
+                Type = "Folder", 
                 ParentId = parentId,
-                UserId = userId
+                UserId = userId,
+                PhysicalPath = string.Empty,
+                Size = 0
             };
 
-            _context.Folders.Add(folder);
+            _context.FileItems.Add(folder);
             await _context.SaveChangesAsync();
 
             return folder;
         }
 
-        public async Task<List<Folder>> GetByParentIdAsync(int? parentId, int userId)
+        public async Task<IEnumerable<FileItem>> GetByParentIdAsync(int? parentId, int userId)
         {
-            return await _context.Folders
-                .Where(f =>
-                    f.ParentId == parentId &&
-                    f.UserId == userId)
+            return await _context.FileItems
+                .Where(f => f.UserId == userId && f.ParentId == parentId && f.Type == "Folder")
                 .ToListAsync();
+        }
+
+        public async Task<FileItem?> GetFolderByIdAsync(int id, int userId)
+        {
+            return await _context.FileItems
+                .FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId && f.Type == "Folder");
         }
     }
 }
