@@ -1,12 +1,10 @@
 ﻿using LocalDriveApi.Models;
 using LocalDriveApi.Settings;
 using Microsoft.Extensions.Options;
-using System.Security.Claims;
-using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-
-
+using System.Security.Claims;
+using System.Text;
 
 namespace LocalDriveApi.Services
 {
@@ -21,40 +19,29 @@ namespace LocalDriveApi.Services
 
         public string GetAccessToken(User user)
         {
-            if (string.IsNullOrEmpty(_jwtSettings.SecretKey) ||
-                string.IsNullOrEmpty(_jwtSettings.Issuer) ||
-                string.IsNullOrEmpty(_jwtSettings.Audience))
+            if (string.IsNullOrEmpty(_jwtSettings.SecretKey))
             {
-                throw new ArgumentNullException("Jwt settings are not configured");
+                throw new ArgumentNullException("JWT secret key is null");
             }
 
-            var claims = new List<Claim>
-    {
-        new Claim("userId", user.Id.ToString())
-    };
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
 
-            if (!string.IsNullOrEmpty(user.UserName))
-                claims.Add(new Claim("userName", user.UserName));
+                new Claim("userName", user.UserName ?? string.Empty),
+                new Claim("email", user.Email ?? string.Empty),
+                new Claim("firstName", user.FirstName ?? string.Empty),
+                new Claim("lastName", user.LastName ?? string.Empty),
+                new Claim("phoneNumber", user.PhoneNumber ?? string.Empty)
+            };
 
-            if (!string.IsNullOrEmpty(user.Email))
-                claims.Add(new Claim("email", user.Email));
+            var secretKeyBytes = Encoding.UTF8.GetBytes(_jwtSettings.SecretKey);
 
-            if (!string.IsNullOrEmpty(user.FirstName))
-                claims.Add(new Claim("firstName", user.FirstName));
-
-            if (!string.IsNullOrEmpty(user.LastName))
-                claims.Add(new Claim("lastName", user.LastName));
-
-            if (!string.IsNullOrEmpty(user.PhoneNumber))
-                claims.Add(new Claim("phoneNumber", user.PhoneNumber));
-
-            var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_jwtSettings.SecretKey)
-            );
+            var signingKey = new SymmetricSecurityKey(secretKeyBytes);
 
             var credentials = new SigningCredentials(
-                key,
-                SecurityAlgorithms.HmacSha256Signature
+                signingKey,
+                SecurityAlgorithms.HmacSha256
             );
 
             var token = new JwtSecurityToken(

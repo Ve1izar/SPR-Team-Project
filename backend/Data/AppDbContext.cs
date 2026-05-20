@@ -9,12 +9,26 @@ namespace LocalDriveApi.Data
         {
         }
 
-        // Додати сюди таблиці типу користувачів, і тд
-        // public DbSet<User> Users { get; set; }
-        // public DbSet<FileItem> FileItems { get; set; }
-
         public DbSet<User> Users { get; set; }
         public DbSet<FileItem> FileItems { get; set; }
-        public DbSet<FileRecord> Files { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Налаштування ієрархії папок для FileItem
+            modelBuilder.Entity<FileItem>()
+                .HasOne(f => f.Parent)
+                .WithMany(f => f.Children)
+                .HasForeignKey(f => f.ParentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Налаштування зв'язку з User
+            modelBuilder.Entity<FileItem>()
+                .HasOne(f => f.User)
+                .WithMany(u => u.FileItems)
+                .HasForeignKey(f => f.UserId)
+                .OnDelete(DeleteBehavior.Cascade); // З юзером видаляються всі його файли
+        }
     }
 }

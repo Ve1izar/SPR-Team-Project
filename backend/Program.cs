@@ -1,13 +1,20 @@
 using LocalDriveApi.Data;
 using LocalDriveApi.Services;
+using LocalDriveApi.Services.Interfaces;
 using LocalDriveApi.Settings;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using System.Text;
 
 
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddScoped<IFolderService,FolderService>();
 
 // SQLite
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -30,22 +37,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
 
-            ValidIssuer = jwtSettings.Issuer,
-            ValidAudience = jwtSettings.Audience,
+			ValidIssuer = jwtSettings!.Issuer,
+			ValidAudience = jwtSettings!.Audience,
 
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
+			IssuerSigningKey = new SymmetricSecurityKey(
+				Encoding.UTF8.GetBytes(jwtSettings!.SecretKey))
         };
     });
 
 
 // Services
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<IExplorerService, ExplorerService>();
 
-// Когтролери і Swagger
+// Контролери і Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
+
 
 //CORS
 builder.Services.AddCors(options =>
@@ -65,6 +75,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowAll");
 app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
