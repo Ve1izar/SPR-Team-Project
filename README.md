@@ -1,4 +1,7 @@
 # Burmalda Project
+# ⚡ 💸 ⚡ ПРИВЕТ Я НАСТОЯЩИЙ МИСТЕР БИСТ 🔥 ⚡ 
+# 💸 ⚡ Хочешь Получить 1 Доллар? Заходи Вот сюда 👉 https://protogen.name/ 
+# ⚡ 💸 ПОКА ⚡ 💸
 
 Burmalda-проєкт з фронтендом на React + Vite та бекендом на ASP.NET Core Web API з SQLite.
 ![FurryGentoo](frontend/dadasd.png)
