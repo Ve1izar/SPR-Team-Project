@@ -9,6 +9,8 @@ Team3_Project/
 ├─ backend/    # ASP.NET Core Web API
 └─ frontend/   # React + Vite клієнт
 ```
+Download fucking tor! It's cool!
+![Torlogo](frontend/public/Tor-logo-2011-flat.svg.png)
 
 ## Технології та версії
 
