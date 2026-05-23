@@ -1,10 +1,7 @@
-# Burmalda Project
-# ⚡ 💸 ⚡ ПРИВЕТ Я НАСТОЯЩИЙ МИСТЕР БИСТ 🔥 ⚡ 
-# 💸 ⚡ Хочешь Получить 1 Доллар? Заходи Вот сюда 👉 https://protogen.name/ 
-# ⚡ 💸 ПОКА ⚡ 💸
+# Team3 Project
 
-Burmalda-проєкт з фронтендом на React + Vite та бекендом на ASP.NET Core Web API з SQLite.
-![FurryGentoo](frontend/dadasd.png)
+Повностек-проєкт з фронтендом на React + Vite та бекендом на ASP.NET Core Web API з SQLite.
+
 ## Структура проєкту
 
 ```text
@@ -12,8 +9,6 @@ Team3_Project/
 ├─ backend/    # ASP.NET Core Web API
 └─ frontend/   # React + Vite клієнт
 ```
-Download fucking tor! It's cool!
-![Torlogo](frontend/public/Tor-logo-2011-flat.svg.png)
 
 ## Технології та версії
 
@@ -120,11 +115,3 @@ npm run lint
 - Файл `.gitignore` у корені вже налаштований для обох частин проєкту.
 - Локальні змінні оточення для frontend (наприклад, `.env.local`) не повинні потрапляти в git.
 - Якщо в майбутньому додасте EF Core migrations, застосовуйте їх командою `dotnet ef database update` у папці `backend`.
-
-
-ваня хуй
-
-
-⚡ 💸 ⚡ ПРИВЕТ Я НАСТОЯЩИЙ МИСТЕР БИСТ 🔥  ⚡ 💸 ⚡
-Хочешь Получить 1 Доллар? Заходи Вот сюда 👉 https://protogen.name/
-⚡ 💸 ПОКА ⚡ 💸
