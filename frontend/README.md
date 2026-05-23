@@ -1,1 +1,0 @@
-SEKS S DEDO-O-OM!!
