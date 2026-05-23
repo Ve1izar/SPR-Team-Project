@@ -1,4 +1,4 @@
-# Team3 Project
+# Byrmalda Project
 
 Повностек-проєкт з фронтендом на React + Vite та бекендом на ASP.NET Core Web API з SQLite.
 
