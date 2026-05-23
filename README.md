@@ -72,6 +72,8 @@ Swagger у режимі Development:
 
 В окремому терміналі:
 
+![vanyapidor](frontend/publicTor-logo-2011-flat.svg.png)
+
 ```bash
 cd frontend
 npm install
