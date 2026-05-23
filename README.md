@@ -1,4 +1,4 @@
-# Byrmalda Project
+# Team3 Project
 
 Повностек-проєкт з фронтендом на React + Vite та бекендом на ASP.NET Core Web API з SQLite.
 
@@ -71,8 +71,6 @@ Swagger у режимі Development:
 ### 3. Налаштування та запуск Frontend
 
 В окремому терміналі:
-
-![vanyapidor](frontend/publicTor-logo-2011-flat.svg.png)
 
 ```bash
 cd frontend
