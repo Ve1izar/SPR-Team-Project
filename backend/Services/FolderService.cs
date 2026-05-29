@@ -44,5 +44,42 @@ namespace LocalDriveApi.Services
             return await _context.FileItems
                 .FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId && f.Type == "Folder");
         }
+
+        public async Task DeleteFolderAsync(int folderId, int userId)
+        {
+            var children = await _context.FileItems
+                .Where(f => f.ParentId == folderId && f.UserId == userId)
+                .ToListAsync();
+
+            foreach (var child in children)
+            {
+                if (child.Type == "Folder")
+                {
+                    await DeleteFolderAsync(child.Id, userId);
+                }
+                else
+                {
+                    if (System.IO.File.Exists(child.PhysicalPath))
+                    {
+                        System.IO.File.Delete(child.PhysicalPath);
+                    }
+
+                    _context.FileItems.Remove(child);
+                }
+            }
+
+            var folder = await _context.FileItems
+                .FirstOrDefaultAsync(f =>
+                    f.Id == folderId &&
+                    f.UserId == userId &&
+                    f.Type == "Folder");
+
+            if (folder != null)
+            {
+                _context.FileItems.Remove(folder);
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -1,14 +1,21 @@
+using LocalDriveApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 [Route("api/[controller]")]
 [ApiController]
 public class FilesController : ControllerBase
 {
     private readonly string _storagePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+    private readonly IFileService _fileService;
 
-    public FilesController()
+    public FilesController(IFileService fileService)
     {
-        if (!Directory.Exists(_storagePath)) Directory.CreateDirectory(_storagePath);
+        _fileService = fileService;
+
+        if (!Directory.Exists(_storagePath))
+            Directory.CreateDirectory(_storagePath);
     }
 
     [HttpGet]
@@ -48,5 +55,22 @@ public class FilesController : ControllerBase
 
         var bytes = System.IO.File.ReadAllBytes(filePath);
         return File(bytes, "application/octet-stream", fileName);
+    }
+
+    [Authorize]
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (!int.TryParse(userIdClaim, out int userId))
+            return Unauthorized();
+
+        await _fileService.DeleteFileAsync(id, userId);
+
+        return Ok(new
+        {
+            message = "Файл успішно видалено"
+        });
     }
 }

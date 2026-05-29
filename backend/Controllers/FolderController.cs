@@ -85,5 +85,24 @@ namespace LocalDriveApi.Controllers
 
             return Ok(result);
         }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (claim == null)
+                return Unauthorized("Invalid token");
+
+            var userId = int.Parse(claim.Value);
+
+            await _folderService.DeleteFolderAsync(id, userId);
+
+            return Ok(new
+            {
+                message = "Папка успішно видалена"
+            });
+        }
+
     }
 }

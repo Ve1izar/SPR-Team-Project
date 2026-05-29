@@ -15,6 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddScoped<IFolderService,FolderService>();
+builder.Services.AddScoped<IExplorerService, ExplorerService>();
+builder.Services.AddScoped<IFileService, FileService>();
+
 
 // SQLite
 builder.Services.AddDbContext<AppDbContext>(options =>

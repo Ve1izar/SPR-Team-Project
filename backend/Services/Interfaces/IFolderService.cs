@@ -9,5 +9,7 @@ namespace LocalDriveApi.Services.Interfaces
         Task<IEnumerable<FileItem>> GetByParentIdAsync(int? parentId, int userId);
         
         Task<FileItem?> GetFolderByIdAsync(int id, int userId);
+
+        Task DeleteFolderAsync(int folderId, int userId);
     }
 }
