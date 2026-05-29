@@ -1,37 +1,85 @@
-using LocalDriveApi.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace LocalDriveApi.Controllers
 {
-    [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
-    public class ExplorerController : ControllerBase
+    [Route("api/files")]
+    public class FilesController : ControllerBase
     {
-        private readonly IExplorerService _explorerService;
+        private readonly string _uploadPath;
 
-        public ExplorerController(IExplorerService explorerService)
+        public FilesController()
         {
-            _explorerService = explorerService;
+            _uploadPath = Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "Uploads");
+
+            if (!Directory.Exists(_uploadPath))
+            {
+                Directory.CreateDirectory(_uploadPath);
+            }
         }
 
-        [HttpGet("search")]
-        public async Task<IActionResult> Search([FromQuery] string query)
+        [HttpGet]
+        public IActionResult GetFiles()
         {
-            if (string.IsNullOrWhiteSpace(query))
-                return BadRequest(new { error = "Запит порожній" });
+            var files = Directory
+                .GetFiles(_uploadPath)
+                .Select(file => new
+                {
+                    name = Path.GetFileName(file),
+                    size = new FileInfo(file).Length
+                });
 
-            // Отримання ID користувача з JWT
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value 
-                             ?? User.FindFirst("id")?.Value;
+            return Ok(files);
+        }
 
-            if (!int.TryParse(userIdClaim, out int userId))
-                return Unauthorized();
+        [HttpPost("upload")]
+        public async Task<IActionResult> Upload(
+            [FromForm] IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Файл пустий");
+            }
 
-            var results = await _explorerService.SearchGloballyAsync(userId, query);
-            return Ok(results);
+            var filePath = Path.Combine(
+                _uploadPath,
+                file.FileName);
+
+            using var stream =
+                new FileStream(
+                    filePath,
+                    FileMode.Create);
+
+            await file.CopyToAsync(stream);
+
+            return Ok(new
+            {
+                message = "uploaded"
+            });
+        }
+
+        [HttpGet("download/{fileName}")]
+        public IActionResult Download(
+            string fileName)
+        {
+            var filePath = Path.Combine(
+                _uploadPath,
+                fileName);
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound();
+            }
+
+            var bytes =
+                System.IO.File.ReadAllBytes(filePath);
+
+            return File(
+                bytes,
+                "application/octet-stream",
+                fileName);
         }
     }
 }
